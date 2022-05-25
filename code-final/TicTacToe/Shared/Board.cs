@@ -34,7 +34,7 @@ namespace TicTacToe.Shared
         public Board Restart() =>
             new Board(ImmutableList<Cell>.Empty);
 
-        public Board Play(int row, int col) => 
+        public Board Play(int row, int col) =>
             this.Play(new Cell(row, col));
             
         private Board Play(Cell at) =>
@@ -42,5 +42,21 @@ namespace TicTacToe.Shared
 
         private Cell Playable(Cell at) =>
             this.PlayableCells.First(playable => playable.Equals(at));
+
+        public IEnumerable<Move> LegalMoves =>
+            this.PlayableCells.Select(cell => new Move(cell, () => this.Play(cell)));
+    }
+
+    public class Move
+    {
+        public Cell At { get; }
+        private Lazy<Board> Result { get; }
+        public Move(Cell at, Func<Board> boardFactory)
+        {
+            this.At = at;
+            this.Result = new(boardFactory);
+        }
+
+        public Board Make() => this.Result.Value;
     }
 }

@@ -28,10 +28,16 @@
                                      ToRow="line.To.Row" ToColumn="line.To.Column" />
                     }
                     
-                    @foreach (Cell empty in this.Board.PlayableCells)
+                    @*@foreach (Cell empty in this.Board.PlayableCells)
                     {
                         <ClickableCell Row="empty.Row" Column="empty.Column"
                                        OnClicked="() => this.MakeMove(empty.Row, empty.Column)"/>
+                    }*@
+
+                    @foreach (Move move in this.Board.LegalMoves)
+                    {
+                        <ClickableCell Row="move.At.Row" Column="move.At.Column"
+                                       OnClicked="() => { this.Board = move.Make(); }"/>
                     }
                 </svg>
             </div>
